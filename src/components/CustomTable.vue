@@ -2,17 +2,17 @@
   <table class="custom-table">
     <thead v-if="headers" class="custom-table__head">
       <tr>
-        <td v-for="title in headers" :key="title"
-          class="custom-table__cell">
+        <td v-for="title in headers" :key="title" class="custom-table__cell">
           {{ title }}
         </td>
+        <td class="custom-table__cell" v-if="hasSomeExpandedRow">#</td>
       </tr>
     </thead>
     <tbody>
       <template v-for="(cells, idx) in rows" :key="idx">
-        <custom-table-row :cells="cells">
-          <template #expand v-if="!!$slots[`expand-row-${idx}`]">
-            <slot :name="`expand-row-${idx}`"/>
+        <custom-table-row :cells="cells" :has-some-expanded-row="hasSomeExpandedRow">
+          <template #expand v-if="!!$slots[getExpandSlotKey(idx)]">
+            <slot :name="getExpandSlotKey(idx)" />
           </template>
         </custom-table-row>
       </template>
@@ -20,10 +20,11 @@
   </table>
 </template>
 
-<script>
+<script lang="ts">
 import CustomTableRow from './CustomTableRow.vue';
 
 export default {
+  EXPAND_ROW_SLOT_PREFIX: 'expand-row',
   props: {
     headers: {
       type: Array,
@@ -38,20 +39,31 @@ export default {
   components: {
     CustomTableRow,
   },
+  methods: {
+    getExpandSlotKey(idx: number): string {
+      return `${this.$options.EXPAND_ROW_SLOT_PREFIX}-${idx}`;
+    },
+  },
+  computed: {
+    hasSomeExpandedRow(): boolean {
+      const slotsKeys: string[] = Object.keys(this.$slots);
+      return slotsKeys.some((key: string) => key.includes(this.$options.EXPAND_ROW_SLOT_PREFIX));
+    },
+  },
 };
 </script>
 
 <style>
-  .custom-table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-  .custom-table__head {
-    background-color: rgb(224, 224, 224);
-  }
-  .custom-table__cell {
-    padding: 20px;
-    border-bottom: 1px solid gray;
-    cursor: pointer;
-  }
+.custom-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.custom-table__head {
+  background-color: rgb(224, 224, 224);
+}
+.custom-table__cell {
+  padding: 20px;
+  border-bottom: 1px solid gray;
+  cursor: pointer;
+}
 </style>

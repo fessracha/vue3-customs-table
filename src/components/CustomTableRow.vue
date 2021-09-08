@@ -4,7 +4,7 @@
       {{ cell }}
     </td>
     <td class="custom-table__cell" v-if="hasSomeExpandedRow">
-      <button v-if="hasCurrentExpand" @click="toggleExpandContent">toggle</button>
+      <button v-if="hasCurrentExpand" @click="expandContentHandler">toggle</button>
     </td>
   </tr>
   <tr v-if="isShowExpandContent && !!hasCurrentExpand">
@@ -13,7 +13,11 @@
     </td>
   </tr>
 </template>
-<script>
+<script lang="ts">
+import mitt from 'mitt';
+
+const eventBus = mitt();
+
 export default {
   data() {
     return {
@@ -30,9 +34,14 @@ export default {
       required: false,
       default: false,
     },
+    singleExpand: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   computed: {
-    additionalCellsCount() {
+    additionalCellsCount(): number {
       let additionalCellsCount = 0;
 
       if (this.hasCurrentExpand) {
@@ -41,17 +50,37 @@ export default {
 
       return additionalCellsCount;
     },
-    cellsCount() {
+    cellsCount(): number {
       return Object.values(this.cells).length + this.additionalCellsCount;
     },
-    hasCurrentExpand() {
+    hasCurrentExpand(): boolean {
       return !!this.$slots.expand;
     },
   },
   methods: {
-    toggleExpandContent() {
+    expandContentHandler(): void {
+      if (this.singleExpand) {
+        eventBus.emit('expand:show');
+        this.showExpandContent();
+      } else {
+        this.toggleExpandContent();
+      }
+    },
+    toggleExpandContent(): void {
       this.isShowExpandContent = !this.isShowExpandContent;
     },
+    showExpandContent(): void {
+      this.isShowExpandContent = true;
+    },
+    separateExpandContent(): void {
+      this.isShowExpandContent = false;
+    },
+  },
+  created(): void {
+    eventBus.on('expand:show', this.separateExpandContent);
+  },
+  beforeUnmount(): void {
+    eventBus.off('expand:show', this.separateExpandContent);
   },
 };
 </script>

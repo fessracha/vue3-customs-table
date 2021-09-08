@@ -10,9 +10,13 @@
     </thead>
     <tbody>
       <template v-for="(cells, idx) in rows" :key="idx">
-        <custom-table-row :cells="cells" :has-some-expanded-row="hasSomeExpandedRow">
+        <custom-table-row
+          :cells="cells"
+          :has-some-expanded-row="hasSomeExpandedRow"
+          :single-expand="singleExpand"
+        >
           <template #expand v-if="!!$slots[getExpandSlotKey(idx)]">
-            <slot :name="getExpandSlotKey(idx)" />
+            <slot :name="getExpandSlotKey(idx)"  />
           </template>
         </custom-table-row>
       </template>
@@ -27,6 +31,7 @@ import CustomTableRow from './CustomTableRow.vue';
   1. Добавить свойство кол-во дополнительных колонок
   2. additionalCellsCount сделать глобальным в скоупе CustomTable (после provide/inject)
   3. headers должно совпадать с количеством полей в rows[0]
+  4. прокидывание свойств single expand, has-some-expanded-row (после provide/inject)
 */
 
 export default {
@@ -40,6 +45,11 @@ export default {
     rows: {
       type: Array,
       required: true,
+    },
+    singleExpand: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   components: {

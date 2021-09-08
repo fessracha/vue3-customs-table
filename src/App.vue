@@ -3,6 +3,7 @@
     <custom-table
       :headers="$options.calloriesHeaders"
       :rows="productsCharacterstics"
+      :single-expand="true"
     >
       <template
         v-for="(product, idx) in productsCharacterstics"

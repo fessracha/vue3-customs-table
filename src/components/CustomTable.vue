@@ -5,7 +5,7 @@
         <td v-for="title in headers" :key="title" class="custom-table__cell">
           {{ title }}
         </td>
-        <td class="custom-table__cell" v-if="hasSomeExpandedRow">#</td>
+        <td class="custom-table__cell" v-if="hasSomeExpandedRow"></td>
       </tr>
     </thead>
     <tbody>
@@ -22,6 +22,12 @@
 
 <script lang="ts">
 import CustomTableRow from './CustomTableRow.vue';
+
+/*
+  1. Добавить свойство кол-во дополнительных колонок
+  2. additionalCellsCount сделать глобальным в скоупе CustomTable (после provide/inject)
+  3. headers должно совпадать с количеством полей в rows[0]
+*/
 
 export default {
   EXPAND_ROW_SLOT_PREFIX: 'expand-row',

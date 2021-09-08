@@ -4,8 +4,12 @@
       :headers="$options.calloriesHeaders"
       :rows="productsCharacterstics"
     >
-      <template #expand-row-1>
-        <p style="font-size: 40px; color: green;">Детальное описание для мороженого</p>
+      <template
+        v-for="(product, idx) in productsCharacterstics"
+        :key="product.name"
+        v-slot:[`expand-row-${idx}`]
+        >
+        <p style="font-size: 40px; color: green;">Детальное описание для {{ product.name }}</p>
       </template>
     </custom-table>
   </div>

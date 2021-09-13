@@ -5,6 +5,11 @@
       :rows="productsCharacterstics"
       :single-expand="true"
     >
+      <template v-slot:[`content-name`]="{cellContent}">
+        <div class="highlight-column-cell">
+          {{ cellContent }}
+        </div>
+      </template>
       <template
         v-for="(product, idx) in productsCharacterstics"
         :key="product.name"
@@ -52,7 +57,7 @@ export default defineComponent({
       ],
     };
   },
-  calloriesHeaders: ['Продукт', 'Каллории', 'Жир', 'Белки', 'Углеводы'],
+  calloriesHeaders: ['Products', 'Ccals', 'Fat', 'Belki', 'Uglevodi'],
 });
 </script>
 
@@ -64,5 +69,13 @@ export default defineComponent({
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.highlight-column-cell {
+  background-color: red;
+  border-radius: 25px;
+  color: white;
+  padding: 15px;
+  display: inline-block;
 }
 </style>

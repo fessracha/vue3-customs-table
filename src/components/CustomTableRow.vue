@@ -1,7 +1,8 @@
 <template>
   <tr>
-    <td class="custom-table__cell" v-for="cell in cells" :key="cell">
+    <td class="custom-table__cell" v-for="(cell, cellKey) in cells" :key="cell">
       {{ cell }}
+      <slot :name="`content-${cellKey}`" :cellContent="cell" />
     </td>
     <td class="custom-table__cell" v-if="hasSomeExpandedRow">
       <button v-if="hasCurrentExpand" @click="expandContentHandler">toggle</button>

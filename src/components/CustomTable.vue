@@ -15,6 +15,11 @@
           :has-some-expanded-row="hasSomeExpandedRow"
           :single-expand="singleExpand"
         >
+          <template
+            v-for="(cell, cellKey) in cells"
+            :key="cellKey" v-slot:[`${getContentSlotKey(cellKey)}`]="{cellContent}">
+            <slot :name="getContentSlotKey(cellKey)" :cellContent="cellContent"/>
+          </template>
           <template #expand v-if="!!$slots[getExpandSlotKey(idx)]">
             <slot :name="getExpandSlotKey(idx)"  />
           </template>
@@ -36,6 +41,7 @@ import CustomTableRow from './CustomTableRow.vue';
 
 export default {
   EXPAND_ROW_SLOT_PREFIX: 'expand-row',
+  CONTENT_SLOT_PREFIX: 'content',
   props: {
     headers: {
       type: Array,
@@ -58,6 +64,10 @@ export default {
   methods: {
     getExpandSlotKey(idx: number): string {
       return `${this.$options.EXPAND_ROW_SLOT_PREFIX}-${idx}`;
+    },
+    getContentSlotKey(cellKey: string): string {
+      console.log(`${this.$options.CONTENT_SLOT_PREFIX}-${cellKey}`);
+      return `${this.$options.CONTENT_SLOT_PREFIX}-${cellKey}`;
     },
   },
   computed: {

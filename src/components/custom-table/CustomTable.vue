@@ -33,8 +33,12 @@
 </template>
 
 <script lang="ts">
+import { PropType } from 'vue';
 import CustomTableRow from './CustomTableRow.vue';
 import helpersMixin from './mixins/helpers';
+import {
+  ICell, THeaders, TRows, TSingleExpand,
+} from './types';
 
 /*
   1. Добавить свойство кол-во дополнительных колонок
@@ -48,16 +52,16 @@ export default {
   CONTENT_SLOT_PREFIX: 'content',
   props: {
     headers: {
-      type: Array,
+      type: Array as PropType<THeaders>,
       required: false,
       default: null,
     },
     rows: {
-      type: Array,
+      type: Array as PropType<TRows>,
       required: true,
     },
     singleExpand: {
-      type: Boolean,
+      type: Boolean as PropType<TSingleExpand>,
       required: false,
       default: false,
     },
@@ -73,7 +77,7 @@ export default {
     getContentSlotKey(cellKey: string): string {
       return `${this.$options.CONTENT_SLOT_PREFIX}-${cellKey}`;
     },
-    keysOfCellsWhichHasSlotContent(cells: any): string[] {
+    keysOfCellsWhichHasSlotContent(cells: ICell): string[] {
       const cellsKeys = Object.keys(cells);
       return cellsKeys.filter((cellKey) => this.hasSlot(this.getContentSlotKey(cellKey)));
     },

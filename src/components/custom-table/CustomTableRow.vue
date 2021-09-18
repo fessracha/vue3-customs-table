@@ -21,28 +21,30 @@
 </template>
 <script lang="ts">
 import mitt from 'mitt';
+import { PropType } from 'vue';
 import helpersMixin from './mixins/helpers';
+import { ICell, TSingleExpand } from './types';
 
 const eventBus = mitt();
 
 export default {
   data() {
     return {
-      isShowExpandContent: false,
+      isShowExpandContent: false as boolean,
     };
   },
   props: {
     cells: {
-      type: Object,
+      type: Object as PropType<ICell>,
       required: true,
     },
     hasSomeExpandedRow: {
-      type: Boolean,
+      type: Boolean as PropType<boolean>,
       required: false,
       default: false,
     },
     singleExpand: {
-      type: Boolean,
+      type: Boolean as PropType<TSingleExpand>,
       required: false,
       default: false,
     },

@@ -1,8 +1,13 @@
 <template>
   <tr>
     <td class="custom-table__cell" v-for="(cell, cellKey) in cells" :key="cell">
-      {{ cell }}
-      <slot :name="`content-${cellKey}`" :cellContent="cell" />
+      <slot
+        v-if="hasSlot(`content-${cellKey}`)"
+        :name="`content-${cellKey}`"
+        :cellContent="cell"/>
+      <template v-else>
+        {{ cell }}
+      </template>
     </td>
     <td class="custom-table__cell" v-if="hasSomeExpandedRow">
       <button v-if="hasCurrentExpand" @click="expandContentHandler">toggle</button>
@@ -10,12 +15,13 @@
   </tr>
   <tr v-if="isShowExpandContent && !!hasCurrentExpand">
     <td :colspan="cellsCount">
-      <slot name="expand" />
+      <slot name="expand"/>
     </td>
   </tr>
 </template>
 <script lang="ts">
 import mitt from 'mitt';
+import helpersMixin from './mixins/helpers';
 
 const eventBus = mitt();
 
@@ -41,6 +47,7 @@ export default {
       default: false,
     },
   },
+  mixins: [helpersMixin],
   computed: {
     additionalCellsCount(): number {
       let additionalCellsCount = 0;

@@ -10,6 +10,11 @@
           {{ cellContent }}
         </div>
       </template>
+      <template v-slot:[`content-carbs`]="{cellContent}">
+        <div class="highlight-column-cell">
+          {{ cellContent }}
+        </div>
+      </template>
       <template
         v-for="(product, idx) in productsCharacterstics"
         :key="product.name"
@@ -23,7 +28,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import CustomTable from './components/CustomTable.vue';
+import CustomTable from './components/custom-table/CustomTable.vue';
 
 export default defineComponent({
   name: 'App',
